@@ -8,6 +8,7 @@
 
 | Skill 名称 | 描述 | 目录链接 |
 | :--- | :--- | :--- |
+| **`ringi-article-illustrator`** | **[推荐]** Ringi IP × Baoyu 工业级技术文章配图工作流：结合宝玉 Type × Style 配图方法论与 Ringi 专属 IP 3D 小剧场（16:9 纯白底、哑光黏土质感、流程工坊与核心动作双模态），全自洽、支持完全离线运行。 | [查看详情](./ringi-article-illustrator/) |
 | **`ringi-ip-article-illustrations`** | Ringi 出品的完整个人 IP 插图工作流：内置已确认的 Ringi 专属 IP 角色（默认透明眼镜版与可选潮酷墨镜版），自动为技术长文、AI 基础设施与工作流生成 16:9 复古彩色扁平 3D 小剧场插图。 | [查看详情](./ringi-ip-article-illustrations/) |
 
 ---
