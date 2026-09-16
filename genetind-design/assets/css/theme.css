@@ -1,0 +1,100 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Tinos:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+        :root {
+            --font-sans: 'Inter', sans-serif;
+            --font-mono: 'Roboto Mono', monospace;
+            --font-accent: 'Tinos', serif;
+            --color-accent-orange: #ea580c;
+            --color-primary-highlight: #fbdd67;
+            --color-canvas: #fcfcfa;
+            --color-surface: #f7f7f4;
+            --color-line: #e7e5de;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background-color: var(--color-canvas);
+            color: #111827;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+
+        .font-mono {
+            font-family: var(--font-mono);
+        }
+
+        .font-accent-italic {
+            font-family: var(--font-accent);
+            font-style: italic;
+            font-synthesis: none;
+        }
+
+        .grid-bg {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0, 0, 0, 0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: #d1d5db;
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: #9ca3af;
+        }
+
+        .icon-card {
+            transition: border-color 280ms ease, background-color 280ms ease, box-shadow 280ms ease, transform 280ms ease;
+        }
+
+        .icon-card:hover {
+            border-color: transparent;
+            background-color: transparent;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .icon-card:hover .icon-frame {
+            color: #000000;
+        }
+
+        .icon-frame {
+            transition: color 280ms ease, transform 280ms ease;
+        }
+
+        .icon-download {
+            transition: background-color 240ms ease, color 240ms ease, border-color 240ms ease, box-shadow 240ms ease;
+        }
+
+        .icon-download:hover {
+            background-color: #fbfaf7;
+            border-color: #d8d3c8;
+            color: #111111;
+            box-shadow: 0 6px 14px rgba(17, 17, 17, 0.04);
+        }
+
+        .icon-download:focus-visible {
+            outline: 1px solid #d8d3c8;
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            .icon-card,
+            .icon-frame,
+            .icon-download {
+                transition: none;
+            }
+
+            .icon-card:hover {
+                transform: none;
+            }
+        }

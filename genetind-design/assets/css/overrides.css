@@ -1,0 +1,60 @@
+/* Editable-package improvements: responsive shell, accessibility, local-first polish. */
+:root {
+  --sidebar-width: 16rem;
+  --focus-ring: #111111;
+  --mobile-gutter: 20px;
+}
+html { scroll-padding-top: 24px; }
+body { min-width: 320px; overflow-x: hidden; }
+a, button { -webkit-tap-highlight-color: transparent; }
+a:focus-visible, button:focus-visible { outline: 2px solid var(--focus-ring); outline-offset: 3px; }
+.genetind-skip-link {
+  position: fixed; left: 16px; top: 12px; z-index: 100;
+  transform: translateY(-160%); padding: 8px 12px; background: #111; color: #fff;
+  font: 500 12px/1.2 var(--font-mono); letter-spacing: .04em;
+}
+.genetind-skip-link:focus { transform: translateY(0); }
+.genetind-nav-toggle, .genetind-nav-backdrop { display: none; }
+#site-sidebar { width: var(--sidebar-width); }
+#page-shell { margin-left: var(--sidebar-width); }
+
+/* Make section anchors land comfortably and keep long labels from overflowing. */
+section[id] { scroll-margin-top: 28px; }
+#site-sidebar a { overflow-wrap: anywhere; }
+img { image-rendering: auto; }
+
+@media (max-width: 900px) {
+  #site-sidebar {
+    transform: translateX(-102%); transition: transform 220ms ease;
+    width: min(84vw, 320px); box-shadow: 16px 0 40px rgba(17,17,17,.08);
+    z-index: 60;
+  }
+  #page-shell { margin-left: 0 !important; width: 100%; }
+  .genetind-nav-toggle {
+    display: inline-flex; position: fixed; top: 14px; left: 14px; z-index: 80;
+    align-items: center; justify-content: center; height: 38px; min-width: 64px;
+    padding: 0 12px; border: 1px solid var(--color-line); background: rgba(252,252,250,.94);
+    color: #111; font: 500 11px/1 var(--font-mono); letter-spacing: .08em; text-transform: uppercase;
+    backdrop-filter: blur(10px);
+  }
+  .genetind-nav-backdrop {
+    display: block; position: fixed; inset: 0; z-index: 50; border: 0;
+    background: rgba(17,17,17,.22); opacity: 0; pointer-events: none; transition: opacity 220ms ease;
+  }
+  .nav-open #site-sidebar { transform: translateX(0); }
+  .nav-open .genetind-nav-backdrop { opacity: 1; pointer-events: auto; }
+  .nav-open { overflow: hidden; }
+  #page-shell > header, #page-shell > main { padding-left: var(--mobile-gutter); padding-right: var(--mobile-gutter); }
+}
+
+@media (max-width: 640px) {
+  :root { --mobile-gutter: 16px; }
+  h1 { letter-spacing: -0.035em; }
+  .grid { min-width: 0; }
+  pre, code { max-width: 100%; overflow-x: auto; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}
