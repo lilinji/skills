@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>丰度热图 · D3 交互版</title>
+<style>/*__STYLE__*/</style>
+</head>
+<body>
+
+<header class="top">
+  <h1><span id="pageTitle">丰度热图</span><span class="sub" id="dataSub">D3.js 交互版 · 行聚类 · 行归一化</span></h1>
+  <div class="chips" id="paramChips"></div>
+</header>
+
+<div id="app">
+  <aside id="sidebar">
+
+    <div class="card">
+      <h3>筛选 <span class="hint" id="filterCount"></span></h3>
+      <div class="body">
+        <div class="row">
+          <label class="lb" id="lbAbRule">相对丰度规则</label>
+          <select id="selAbRule">
+            <option value="mean">平均相对丰度 ≥ 阈值</option>
+            <option value="max">任一（最大）样本 ≥ 阈值</option>
+            <option value="frac">至少 N 个样本 ≥ 阈值</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb" id="lbAbThresh">相对丰度阈值</label>
+          <input type="number" id="inAbThresh" min="0" max="100" step="0.1" value="1">
+          <span class="unit" id="unitAbThresh">%</span>
+        </div>
+        <div class="row" id="rowFracN" style="display:none">
+          <label class="lb">达标样本数</label>
+          <input type="number" id="inFracN" min="1" max="63" step="1" value="10">
+          <span class="unit">个</span>
+        </div>
+        <div class="row">
+          <label class="lb">特征数量阈值</label>
+          <input type="number" id="inPrevN" min="1" max="63" step="1" value="10">
+          <span class="unit">个样本检出</span>
+        </div>
+        <div class="row">
+          <label class="label cb" style="gap:6px">
+            <input type="checkbox" id="chkPrev" checked>
+            <span>保留在 ≥ N 个样本中检出的特征</span>
+          </label>
+        </div>
+        <div class="row">
+          <label class="lb">检索名称</label>
+          <input type="text" id="inSearch" placeholder="名称 / 分类 / 编号">
+        </div>
+        <div class="row" style="margin-top:2px">
+          <button id="btnResetFilter" style="flex:1 1 auto">重置筛选</button>
+          <button id="btnTopN" style="flex:1 1 auto">按丰度 Top 30</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>归一化与配色</h3>
+      <div class="body">
+        <div class="row">
+          <label class="lb">归一化方式</label>
+          <select id="selTransform">
+            <option value="row.zscore">行 Z-score（row）</option>
+            <option value="row.center">行中心化（减均值）</option>
+            <option value="row.minmax">行 Min-Max（0–1）</option>
+            <option value="log10">log10(x+1)</option>
+            <option value="none">不归一化</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb">计算基础</label>
+          <select id="selBasis">
+            <option value="rel">相对丰度 %</option>
+            <option value="raw">原始丰度值</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb">色阶</label>
+          <select id="selScheme"></select>
+        </div>
+        <div class="row">
+          <label class="label cb"><input type="checkbox" id="chkSym" checked><span>以 0 为中心对称</span></label>
+        </div>
+        <div class="row">
+          <label class="lb">分位裁剪</label>
+          <input type="number" id="inClip" min="0" max="20" step="0.5" value="0">
+          <span class="unit">%（0=关闭）</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>聚类与排序</h3>
+      <div class="body">
+        <div class="row">
+          <label class="label cb"><input type="checkbox" id="chkRowCluster" checked><span>行聚类（特征层次聚类）</span></label>
+        </div>
+        <div class="row">
+          <label class="lb">距离</label>
+          <select id="selDist">
+            <option value="euclidean">欧氏距离 euclidean</option>
+            <option value="correlation">相关距离 1−r</option>
+            <option value="cosine">余弦距离</option>
+            <option value="manhattan">曼哈顿距离</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb">连接方式</label>
+          <select id="selLinkage">
+            <option value="average">平均连接 average (UPGMA)</option>
+            <option value="complete">完全连接 complete</option>
+            <option value="single">单连接 single</option>
+            <option value="ward">Ward.D2</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb">行顺序</label>
+          <select id="selRowOrder">
+            <option value="cluster">聚类顺序</option>
+            <option value="original">原始表顺序</option>
+            <option value="hierarchy">按分类层级</option>
+            <option value="abundance">按平均丰度降序</option>
+            <option value="name">按名称</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb">列内容</label>
+          <select id="selColMode">
+            <option value="sample">各样本</option>
+            <option value="group">分组均值</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb">列顺序</label>
+          <select id="selColOrder">
+            <option value="original">原始表顺序</option>
+            <option value="group">按分组归并</option>
+            <option value="cluster">列聚类</option>
+          </select>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>显示</h3>
+      <div class="body">
+        <div class="row" style="flex-wrap:wrap;gap:10px 14px">
+          <label class="cb"><input type="checkbox" id="chkRowDendro" checked><span>行聚类树</span></label>
+          <label class="cb"><input type="checkbox" id="chkColDendro"><span>列聚类树</span></label>
+          <label class="cb"><input type="checkbox" id="chkAnn" checked><span>分组色条</span></label>
+          <label class="cb"><input type="checkbox" id="chkStrip" checked><span id="lbStrip">层级色条</span></label>
+          <label class="cb"><input type="checkbox" id="chkGrid" checked><span>网格线</span></label>
+          <label class="cb"><input type="checkbox" id="chkValues"><span>单元格数值</span></label>
+        </div>
+        <div class="row" style="margin-top:6px">
+          <label class="lb">行标签</label>
+          <select id="selRowLabel">
+            <option value="name">名称</option>
+            <option value="both">编号 + 名称</option>
+            <option value="id">仅编号</option>
+            <option value="none">不显示</option>
+          </select>
+        </div>
+        <div class="row">
+          <label class="lb">标签字号</label>
+          <input type="number" id="inFont" min="8" max="18" step="1" value="11">
+          <span class="unit">px</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>导出</h3>
+      <div class="body">
+        <div class="btns">
+          <button id="btnSvg">导出 SVG</button>
+          <button id="btnPng">导出 PNG</button>
+        </div>
+        <div class="btns" style="margin-top:6px">
+          <button id="btnTsv" class="primary">导出归一化矩阵 (TSV)</button>
+        </div>
+        <div class="btns" style="margin-top:6px">
+          <button id="btnTsvRel">导出相对丰度% (TSV)</button>
+          <button id="btnFit">重置视图</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <h3>分组图例 <span class="hint" id="legendHint"></span></h3>
+      <div class="body"><div class="glegend" id="groupLegend"></div></div>
+    </div>
+
+    <div class="card" style="border:none">
+      <details class="help">
+        <summary>参数说明与算法口径</summary>
+        <div class="body" id="helpBody"></div>
+      </details>
+    </div>
+
+  </aside>
+
+  <main id="main">
+    <div class="panel" id="chartPanel">
+      <div class="panel-head">
+        <span id="viewTitle">特征 × 样本热图</span>
+        <span class="spacer"></span>
+        <span id="zoomInfo" style="color:#8a97a8"></span>
+        <button id="btnZoomIn" title="放大">＋</button>
+        <button id="btnZoomOut" title="缩小">－</button>
+        <button id="btnResetZoom">适应窗口</button>
+      </div>
+      <div id="chartWrap">
+        <svg id="heatmap"></svg>
+        <div id="tooltip"></div>
+      </div>
+    </div>
+
+    <div class="panel" id="detailPanel">
+      <div class="panel-head">
+        <span class="ttl" id="detailTitle">丰度分布</span>
+        <span id="detailSub" style="color:#8a97a8">点击热图中的任意一行查看该特征在各样本/分组中的丰度曲线</span>
+        <span class="spacer"></span>
+        <button id="btnClearSel" style="padding:3px 8px;font-size:11.5px">清除选择</button>
+      </div>
+      <div id="detailBody">
+        <div id="profileWrap"><svg id="profile"></svg></div>
+        <div id="detailInfo"><div class="empty-hint">未选择特征</div></div>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>/*__D3__*/</script>
+<script>/*__DATA__*/</script>
+<script>/*__APP__*/</script>
+</body>
+</html>

@@ -2,13 +2,13 @@
 
 <div align="center">
 
-![Skills Count](https://img.shields.io/badge/Skills-6%20Active-blue?style=for-the-badge&logo=probot)
+![Skills Count](https://img.shields.io/badge/Skills-7%20Active-blue?style=for-the-badge&logo=probot)
 ![Platforms](https://img.shields.io/badge/Platform-Antigravity%20%7C%20Claude%20Code%20%7C%20Codex-orange?style=for-the-badge&logo=visualstudiocode)
 ![License](https://img.shields.io/badge/License-MIT-green?style=for-the-badge)
 ![Status](https://img.shields.io/badge/Status-Production%20Ready-success?style=for-the-badge)
 
 <p align="center">
-  <strong>面向未来智能体的高阶设计系统、技术配图工坊、硬核写作引擎与运行时套件</strong>
+  <strong>面向未来智能体的高阶设计系统、技术配图工坊、硬核写作引擎、运行时套件与科研数据可视化工具箱</strong>
   <br />
   打造高辨识度、工业级、严谨自洽且防 AI 幻觉（Anti-Slop）的生产力武器库
 </p>
@@ -36,6 +36,11 @@
 | <img src="./ringi-article-illustrator/assets/characters/ringi/ringi-tshirt-standee-clearglasses.jpg" alt="Ringi Clear Glasses" width="460"/> | <img src="./ringi-article-illustrator/assets/characters/ringi/ringi-tshirt-standee-sunglasses.jpg" alt="Ringi Sunglasses" width="460"/> |
 | **沉稳严谨科研/架构师人设** | **极客硬核黑客/实战排障人设** |
 
+| 📊 交互热图：悬停读数 + 十字高亮 (`abundance-heatmap`) | 🔍 点击任意通路看各样本 / 分组丰度曲线 |
+| :---: | :---: |
+| <img src="./abundance-heatmap/docs/preview-heatmap.jpg" alt="丰度热图悬停读数" width="460"/> | <img src="./abundance-heatmap/docs/preview-profile.jpg" alt="通路丰度曲线" width="460"/> |
+| **KEGG 通路 × 63 样本（行聚类 + 行 Z-score + 双阈值）** | **单条通路在 21 个分组中的丰度曲线（深浅两线＝样本 / 组均值）** |
+
 ---
 
 ## 📂 Skills 全景矩阵
@@ -50,9 +55,12 @@ lilinji/skills
 │   ├── ringi-ip-article-illustrations# 完整个人 IP 插图系统 (内置立绘+支持自建角色+AI工作流模板)
 │   └── ringi-anthropic-art           # Anthropic/Claude 官方手绘编辑概念插画美学引擎
 │
-└── ✍️ 硬核写作与智能体运行时 (Technical Writing & Agent Runtime)
-    ├── ringi-writing-dna             # 专栏级写作 DNA 蒸馏器 (No Naked Formula 2.0, 真实生产事故复盘, 极客大实话)
-    └── frontier-agent                # 开源智能体运行时与 TUI 终端 (Stateful ReAct, 多智能体团队, 沙箱隔离)
+├── ✍️ 硬核写作与智能体运行时 (Technical Writing & Agent Runtime)
+│   ├── ringi-writing-dna             # 专栏级写作 DNA 蒸馏器 (No Naked Formula 2.0, 真实生产事故复盘, 极客大实话)
+│   └── frontier-agent                # 开源智能体运行时与 TUI 终端 (Stateful ReAct, 多智能体团队, 沙箱隔离)
+│
+└── 📊 科研数据可视化 (Scientific Data Visualization)
+    └── abundance-heatmap             # 丰度表(KEGG/GO/OTU/物种/基因/代谢物) → 单文件离线交互热图 (行聚类+行归一化+双阈值)
 ```
 
 ---
@@ -67,6 +75,7 @@ lilinji/skills
 | **`ringi-anthropic-art`** | 概念美学 / 艺术卡片 | **Anthropic / Claude 官方手绘概念插画**。<br>“画一张 Anthropic 风格的概念图”、“手绘隐喻卡片” | 满版纯色底、不规则象牙白承载形、朴拙近黑手绘线条，将抽象分布式系统、算子通信、哲学隐喻转化为高质感扁平艺术卡片。 | [进入目录](./ringi-anthropic-art/) |
 | **`ringi-writing-dna`** | 写作引擎 / 风格克隆 | **专栏级写作 DNA 蒸馏与风格克隆引擎**。<br>“以 Ringi 风格撰写深度长文”、“提取这批文章的写作风格” | 原生内置《AI Infra 大话西游之水滴石穿》专栏写作心法（No Naked Formula 2.0、线上事故复盘、5 点速记口诀），支持 6 层写作基因反向蒸馏。 | [进入目录](./ringi-writing-dna/) |
 | **`frontier-agent`** | 智能体运行时 / 终端 | **FrontierAgent 智能体运行时与终端系统**。<br>“启动多智能体协作调研”、“运行 frontier-agent 沙箱” | 支持 Stateful ReAct 单兵循环与 Agent Team 多智能体团队，提供 Textual 原生 TUI、三级任务沙箱隔离与差分审计回滚。 | [进入目录](./frontier-agent/) |
+| **`abundance-heatmap`** | 数据可视化 / 生信分析 | **丰度表 → 单文件离线交互热图**。<br>“画个热图”、“KEGG 通路热图”、“OTU/物种丰度热图”、“行聚类 + 行归一化 + 1% 阈值” | D3 v7 内联进产物（无外链、无 fetch，双击即看）：行层次聚类树 + 行 Z-score + 相对丰度/特征数量双阈值（口径可切），悬停读数、缩放平移、点击看曲线，导出 SVG/PNG/TSV；自动识别方向/分隔符/注释列/分类层级，自带 21 项自检。 | [进入目录](./abundance-heatmap/) |
 
 ---
 
@@ -81,6 +90,7 @@ graph LR
     B --> D["ringi-anthropic-art\n概念级手绘封面与隐喻"]
     A --> E["genetind-design\nUI组件/Landing Page/社媒宣发卡片"]
     A --> F["frontier-agent\n长程深度多智能体调研团队"]
+    A --> G["abundance-heatmap\n科研数据交互热图与曲线"]
 ```
 
 1. **顶级技术长文全栈交付**：
@@ -91,6 +101,10 @@ graph LR
 2. **企业级科研与技术产品发布**：
    - 使用 **`genetind-design`** 快速构筑高严谨度、低熵美学的 Web UI 页面。
    - 使用其内置的 3 大固定社媒模版一键导出统一调性的 Twitter/X 与 LinkedIn 宽幅宣发 Banner。
+
+3. **科研数据可视化交付**：
+   - 使用 **`abundance-heatmap`** 把 KEGG / GO / OTU / 物种 / 基因 / 代谢物丰度表一键变成单文件交互热图（行聚类 + 行归一化 + 双阈值），可选分组均值、点击看曲线，直接发给合作者或作为补充材料。
+   - 导出的 SVG 为矢量图，可继续进 Figma / PPT，套用 **`genetind-design`** 的视觉规范做汇报版式。
 
 ---
 

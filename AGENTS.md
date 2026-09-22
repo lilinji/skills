@@ -2,10 +2,15 @@
 
 ## Project Overview
 
-Collection of Claude Code / agent skills for generating Ringi-branded AI-infrastructure illustrations. Two skills:
+Collection of Claude Code / agent skills by Ringi (lilinji): AI-infrastructure illustration pipelines, visual design systems, writing engines, agent runtimes, and scientific data visualization. Seven skills:
 
 - **`ringi-article-illustrator/`** — 6-step article→illustration workflow (Type × Style × IP matrix). Analyzes a markdown article, proposes illustration types, generates 16:9 images via the host's image tool.
 - **`ringi-ip-article-illustrations/`** — IP-character-driven illustration pipeline. Manages reusable character assets (Ringi) with a draft→confirmed state machine, then auto-illustrates articles end-to-end.
+- **`genetind-design/`** — GeneTind visual design system (color tokens, social card templates, banner masters).
+- **`ringi-anthropic-art/`** — Anthropic/Claude-style hand-drawn concept illustration engine.
+- **`ringi-writing-dna/`** — writing-style distillation & cloning engine for long-form technical articles.
+- **`frontier-agent/`** — agent runtime + native TUI (Stateful ReAct, multi-agent teams, sandboxing).
+- **`abundance-heatmap/`** — abundance table (KEGG/GO/OTU/species/gene/metabolite) → **single-file offline interactive D3 heatmap** (row clustering + row Z-score + dual thresholds). Python-stdlib builder; D3 vendored in `assets/` and inlined into the output.
 
 Skills are distributed by copying each `SKILL.md` directory into a client skill dir (`~/.claude/skills`, Antigravity/Gemini, Codex). MIT licensed, copyright Ringi (lilinji).
 
@@ -45,6 +50,10 @@ Key data flow per skill (from SKILL.md + `references/article-workflow.md`):
 | `ringi-ip-article-illustrations/references/` | `character-package.md` (runtime layout + state machine — read first), `article-workflow.md`, `tool-workflow.md`, `ip-builder.md`, `illustration-style.md`, `ai-infrastructure-templates.md`, `character-spec.md` |
 | `ringi-ip-article-illustrations/characters/` | Character manifests (`ringi/character.json`) + assets |
 | `ringi-ip-article-illustrations/docs/` | Images only (gallery); reference prose lives in `references/` |
+| `abundance-heatmap/` | Abundance table → offline interactive heatmap HTML |
+| `abundance-heatmap/scripts/` | `build_heatmap.py` (stdlib-only builder, all CLI options), `run.sh` (one-shot entry), `demo_data.py` (fixtures), `selftest.sh` (21 checks) |
+| `abundance-heatmap/assets/` | `template.html` / `style.css` / `app.js` (front-end engine) + `d3.v7.min.js` (vendored, inlined at build time) |
+| `abundance-heatmap/references/` | `parameters.md` — threshold/normalization/clustering/export semantics + FAQ |
 
 ## Development Commands
 
@@ -95,13 +104,13 @@ No build step, no package manager, no lint config, no test suite.
 ## Runtime/Tooling Preferences
 
 - **Python 3** (stdlib only); scripts assume execution from the skill's own directory (`os.path.dirname(__file__)` path resolution).
-- No Node/npm, no third-party deps, no package.json/requirements.txt/pyproject.
+- No Node/npm, no third-party deps, no package.json/requirements.txt/pyproject. Exception: browser-side libraries under a skill's `assets/` are physical assets (e.g. `abundance-heatmap/assets/d3.v7.min.js`, ISC) that get inlined into the generated artifact for offline use; they are not runtime dependencies.
 - Image generation requires a host tool supporting `referenced_image_paths` (identity anchoring). Supported envs: baoyu-image-gen, GenAI, OpenAI, DashScope, Replicate, local WebUI.
 - Runtime character state lives in `<runtime-root>/.punk-ip-assets/` (project-scoped, not the repo).
 
 ## Testing & QA
 
-- **No test suite, no CI, no coverage configs exist** in this repo.
+- **No CI or coverage configs exist** in this repo. The only test script is `abundance-heatmap/scripts/selftest.sh` (21 checks); run it after touching that skill's scripts or assets.
 - Validation is runtime-only: `character_registry.py` input guards (slug format, asset existence, confirmed status).
 - QA policy lives in `ringi-article-illustrator/SKILL.md` step 5 (降级保障): on API 429, output prompts + Mermaid/ASCII fallbacks instead of fabricating image files.
 - If adding tests: plain `unittest`/`pytest` scripts colocated in `scripts/` would match the stdlib-only convention; no existing runner config to extend.
